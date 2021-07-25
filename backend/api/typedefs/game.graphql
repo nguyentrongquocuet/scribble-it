@@ -1,0 +1,15 @@
+type Room @key(fields: "_id") {
+  _id: Int!
+  name: String!
+  crew: [User!]!
+}
+
+type Query {
+  rooms(first: Int = 2): [Room!]!
+  room(_id: Int): Room
+  crew(_id: Int): [User!]
+}
+
+type User @key(fields: "_id") @extends {
+  _id: Int! @external
+}

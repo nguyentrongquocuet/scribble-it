@@ -7,7 +7,7 @@
       "friends": []
     },
     {
-      "_id": 1,
+      "_id": 2,
       "name": "Yen",
       "email": "mail2",
       "friends": [
@@ -36,6 +36,32 @@
       "name": "Bao",
       "email": "mail3",
       "friends": []
+    }
+  ],
+  "rooms": [
+    {
+      "_id": 1,
+      "name": "room1",
+      "crew": [
+        {
+          "_id": 1
+        },
+        {
+          "_id": 2
+        }
+      ]
+    },
+    {
+      "_id": 2,
+      "name": "room2",
+      "crew": [
+        {
+          "_id": 3
+        },
+        {
+          "_id": 4
+        }
+      ]
     }
   ]
 }

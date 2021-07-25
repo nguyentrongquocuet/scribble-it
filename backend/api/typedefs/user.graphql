@@ -1,4 +1,4 @@
-type User {
+type User @key(fields: "_id") {
   _id: Int!
   name: String!
   password: String!
