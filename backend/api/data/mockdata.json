@@ -1,0 +1,41 @@
+{
+  "users": [
+    {
+      "_id": 1,
+      "name": "Quoc",
+      "email": "mail1",
+      "friends": []
+    },
+    {
+      "_id": 1,
+      "name": "Yen",
+      "email": "mail2",
+      "friends": [
+        {
+          "_id": 4,
+          "name": "dat",
+          "email": "mail4",
+          "friends": []
+        },
+        {
+          "_id": 5,
+          "name": "dat5",
+          "email": "mail5",
+          "friends": []
+        },
+        {
+          "_id": 6,
+          "name": "dsdasdat",
+          "email": "mail6",
+          "friends": []
+        }
+      ]
+    },
+    {
+      "_id": 3,
+      "name": "Bao",
+      "email": "mail3",
+      "friends": []
+    }
+  ]
+}
