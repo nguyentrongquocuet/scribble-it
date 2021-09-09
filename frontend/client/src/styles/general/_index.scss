@@ -1,0 +1,19 @@
+body {
+  --body-bg: url('@/assets/bg.jpg');
+  background: var(--body-bg);
+  background-size: cover;
+}
+
+#app {
+  min-height: 100vh;
+  position: relative;
+}
+
+.border {
+
+}
+
+.border--sketchy {
+  --border-color: #303030;
+  border: 1px solid var(--border-color);
+}

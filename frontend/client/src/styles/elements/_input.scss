@@ -1,0 +1,20 @@
+.form__field{
+  height: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: .25em 1.5em;
+}
+
+.form__field--nobg {
+  .input, .field__faker {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .field__faker {
+    width: 100%;
+  }
+}
+

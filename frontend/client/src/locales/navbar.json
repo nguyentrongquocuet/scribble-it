@@ -1,0 +1,16 @@
+{
+  "en": {
+    "entries": {
+      "login": "Login",
+      "logo": "Scribble It",
+      "signup": "Sign Up"
+    }
+  },
+  "vi": {
+    "entries": {
+      "login": "Dang nhap",
+      "logo": "Duoi hinh bat chu",
+      "signup": "Dang ky"
+    }
+  }
+}

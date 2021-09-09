@@ -10,6 +10,6 @@ type Query {
   crew(_id: Int): [User!]
 }
 
-type User @key(fields: "_id") @extends {
-  _id: Int! @external
+type User @key(fields: "id") @extends {
+  id: ID! @external
 }

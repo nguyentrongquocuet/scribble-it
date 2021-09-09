@@ -1,0 +1,11 @@
+.home-menu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.home-menu__entry {
+  .btn__content {
+    cursor: pointer;
+  }
+}

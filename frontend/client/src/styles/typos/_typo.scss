@@ -1,0 +1,45 @@
+@font-face {
+  src: url("@/assets/Caroni-Regular.otf");
+  font-family: Caroni;
+}
+
+html {
+  font-size: 16px;
+}
+
+* {
+  font-family: "Caroni";
+}
+
+$base-size: 16;
+
+@mixin heading() {
+  $base: 2;
+  @for  $tier from 1 to 7 {
+    .heading.h#{$tier}{
+      font-size: ( $base - $tier * 0.2 + 0.2 ) * $base-size * 1px;
+    }
+  }
+}
+
+@include heading();
+
+@function fS($factor) {
+  @return $factor * $base-size * 1px;
+}
+
+.text {
+  color: var(--color);
+  &.text--s {
+    font-size: fS(0.9);
+  }
+  &.text--l {
+    font-size: fS(1.2);
+  }
+  &.text--xl {
+    font-size: fS(1.4);
+  }
+  &.text--bold {
+    font-weight: bold;
+  }
+}

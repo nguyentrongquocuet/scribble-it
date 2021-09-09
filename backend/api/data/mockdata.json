@@ -38,6 +38,28 @@
       "friends": []
     }
   ],
+  "masters": [
+    {
+      "_id": 1,
+      "name": "master 1",
+      "pm": "delete:all"
+    },
+    {
+      "_id": 2,
+      "name": "master 2",
+      "pm": "delete:all"
+    },
+    {
+      "_id": 3,
+      "name": "master 3",
+      "pm": "write:all"
+    },
+    {
+      "_id": 4,
+      "name": "master 4",
+      "pm": "read:all"
+    }
+  ],
   "rooms": [
     {
       "_id": 1,
@@ -49,7 +71,10 @@
         {
           "_id": 2
         }
-      ]
+      ],
+      "master": {
+        "_id": 2
+      }
     },
     {
       "_id": 2,
@@ -61,7 +86,10 @@
         {
           "_id": 4
         }
-      ]
+      ],
+      "master": {
+        "_id": 3
+      }
     }
   ]
 }

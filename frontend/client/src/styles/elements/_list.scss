@@ -1,0 +1,10 @@
+.list {
+  display: flex;
+}
+
+.list--vertical {
+  flex-direction: column;
+  .list__item + .list__item {
+    margin-top: var(--block-space);
+  }
+}

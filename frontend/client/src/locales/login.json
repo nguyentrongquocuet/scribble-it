@@ -1,0 +1,25 @@
+{
+  "en": {
+    "username": {
+      "label": "Username",
+      "placeholder": "username...",
+      "help_text": "Type your username here"
+    },
+    "password": {
+      "label": "Password",
+      "placeholder": "password...",
+      "help_text": "Type your password here"
+    },
+    "cta_login": {
+      "label": "Login"
+    },
+    "cta_forgot_password": {
+      "pre": "You've forgot your password?, ",
+      "label": "Forgot password"
+    },
+    "cta_signup": {
+      "pre": "Don't have a account?, ",
+      "label": "Sign Up"
+    }
+  }
+}

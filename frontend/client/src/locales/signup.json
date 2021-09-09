@@ -1,0 +1,26 @@
+{
+  "en": {
+    "username": {
+      "label": "Username",
+      "placeholder": "username...",
+      "help_text": "Type your username here"
+    },
+    "password": {
+      "label": "password",
+      "placeholder": "password...",
+      "help_text": "type your password here"
+    },
+    "confirm_password": {
+      "label": "repassword",
+      "placeholder": "password...",
+      "help_text": "type your password again"
+    },
+    "avatar": {
+      "label": "Choose your avatar",
+      "help_text": "Choose a image file less than 1MB"
+    },
+    "cta_signup": {
+      "label": "Signup"
+    }
+  }
+}

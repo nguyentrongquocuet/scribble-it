@@ -1,0 +1,57 @@
+scalar Upload
+
+interface FullDetailUser {
+  id: ID!
+  password: String!
+  username: String!
+  created_at: Float!
+  avatar: String
+}
+
+type User @key(fields: "id") {
+  id: ID!
+  username: String!
+  avatar: String
+}
+
+type Query {
+  user(id: Int!): User
+  users(first: Int = 10): [User!]!
+}
+
+type AuthToken {
+  token: String!
+  expiredAt: Float!
+  user: User!
+}
+
+type InputError {
+  field: String
+  error: String
+}
+
+type InvalidInput {
+  errors: [InputError!]!
+}
+
+type LoginFailed {
+  message: String
+}
+
+type AlreadyRegisted {
+  message: String
+}
+
+union SignUpResult = AuthToken | AlreadyRegisted | InvalidInput
+
+union LoginResult = AuthToken | LoginFailed
+
+type Mutation {
+  SignUp(
+    username: String!
+    password: String!
+    repassword: String!
+    avatar: Upload
+  ): SignUpResult
+  Login(username: String!, password: String!): LoginResult
+}

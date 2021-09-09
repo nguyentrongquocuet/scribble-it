@@ -1,0 +1,21 @@
+.pcimg__wrapper {
+  position: relative;
+  width: fit-content;
+  --h: 40px;
+  .pcimg__image{
+    max-width: 100%;
+    height: var(--h);
+  }
+  .pcimg__content {
+    --w: 75%;
+    --l: 10%;
+    width: var(--w);
+    height: 100%;
+    position: absolute;
+    top: 0;
+    margin-left: var(--l);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
