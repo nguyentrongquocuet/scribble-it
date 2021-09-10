@@ -20,6 +20,8 @@
     "rules": {
         "import/no-extraneous-dependencies": "off",
         "import/extensions": "off",
-        "import/no-unresolved": "off"
+        "import/no-unresolved": "off",
+        "indent": "off",
+        "@typescript-eslint/indent": ["error", 2]
     }
 }

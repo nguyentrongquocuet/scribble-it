@@ -1,6 +1,6 @@
 <template>
   <div class="container login__container">
-    <Form  class="form login__form">
+    <Form @data="onFormSubmit" class="form login__form">
       <div class="list list--vertical">
         <div class="list__item border border--sketchy">
           <FormInput
@@ -20,33 +20,33 @@
             name="password"
           />
         </div>
-        <div class="list__item border border--sketchy">
-          <FormInput
-            :placeholder="t('password.placeholder')"
-            :label="t('password.label')"
-            :helpText="t('password.help_text')"
-            type="file"
-            name="avatar"
-          />
-        </div>
         <div class="form__field list__item logn__cta login__submit">
-          <Button size="L" variant="outlined" class="text text--l border border--sketchy">
-            {{ t('cta_login.label') }}
+          <Button
+            size="L"
+            variant="outlined"
+            class="text text--l border border--sketchy"
+          >
+            {{ t("cta_login.label") }}
+            {{l}}
+            {{s}}
+            {{f}}
           </Button>
         </div>
       </div>
-    </form>
+    </Form>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from 'vue';
+import { defineComponent } from 'vue';
 import { useI18n } from 'vue-i18n';
 import FormInput from '@/elements/FormInput.vue';
 import Button from '@/elements/Button.vue';
 import Form from '@/components/Form.vue';
 
 import LoginI18n from '@/locales/login.json';
+import { LoginFormDataMap } from '@/types/utils';
+import useLogin from '@/services/hooks/useLogin';
 
 export default defineComponent({
   components: {
@@ -58,9 +58,21 @@ export default defineComponent({
     const { t } = useI18n({
       messages: LoginI18n,
     });
+    const {
+      loading, failResult, successResult, login,
+    } = useLogin();
+
+    function onFormSubmit(data: LoginFormDataMap): void {
+      const { username, password } = data;
+      login(username, password);
+    }
 
     return {
       t,
+      l: loading,
+      s: successResult,
+      f: failResult,
+      onFormSubmit,
     };
   },
 });

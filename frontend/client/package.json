@@ -2,7 +2,7 @@
   "name": "dhbc",
   "version": "0.0.0",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --mode=development",
     "build": "vue-tsc --noEmit && vite build",
     "serve": "vite preview"
   },
@@ -10,12 +10,18 @@
     "client"
   ],
   "dependencies": {
+    "@apollo/client": "^3.4.10",
+    "@vue/apollo-composable": "^4.0.0-alpha.14",
+    "apollo-upload-client": "^16.0.0",
+    "graphql": "^15.5.3",
+    "graphql-tag": "^2.12.5",
     "vue": "^3.2.6",
     "vue-i18n": "^9.1.7",
     "vue-router": "^4.0.11",
     "vuex": "^4.0.2"
   },
   "devDependencies": {
+    "@types/apollo-upload-client": "^14.1.0",
     "@types/node": "^16.7.13",
     "@typescript-eslint/eslint-plugin": "^4.31.0",
     "@typescript-eslint/parser": "^4.31.0",

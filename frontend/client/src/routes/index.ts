@@ -1,10 +1,11 @@
+import { RouteRecordRaw } from 'vue-router';
 import Login from '@/components/auth/Login.vue';
 import SignUp from '@/components/auth/SignUp.vue';
 import HomeMenu from '@/components/HomeMenu.vue';
 import NotFound from '@/views/NotFound.vue';
 import Welcome from '@/views/Welcome.vue';
 
-export const NotAuthenticatedRoute = [
+export const NotAuthenticatedRoute: RouteRecordRaw[] = [
   {
     path: '/hello',
     component: Welcome,
@@ -38,7 +39,6 @@ export const NotAuthenticatedRoute = [
   {
     path: '/',
     redirect: '/hello',
-    exact: true,
   },
   {
     path: '/:pathMatch(.*)*',

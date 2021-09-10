@@ -1,9 +1,14 @@
-export interface IBaseUser {
+export interface User {
   id: string;
-  name: string;
-  avatar?:string;
+  username: string;
+  avatar?: string;
 }
 
-export interface IUser extends IBaseUser {
+export interface BaseAuthToken {
+  token: string;
+  expireAt: number;
+}
 
+export interface UserAuthToken extends BaseAuthToken {
+  user: User;
 }

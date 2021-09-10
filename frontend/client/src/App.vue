@@ -3,14 +3,18 @@
 </template>
 
 <script lang="ts">
+import { defineComponent, provide } from 'vue';
+import { DefaultApolloClient } from '@vue/apollo-composable';
+import { apolloClient } from '@/services';
 import NavBar from '@/components/NavBar.vue';
-import { defineComponent } from 'vue';
+
 export default defineComponent({
-  components:{
+  components: {
     NavBar,
   },
-  setup(){
-    console.log("HELLO");
+  setup() {
+    console.log('HELLO');
+    provide(DefaultApolloClient, apolloClient);
   },
 });
 </script>
