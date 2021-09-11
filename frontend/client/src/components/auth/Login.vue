@@ -1,5 +1,15 @@
 <template>
-  <div class="container login__container">
+  <div class="login__container form__wrapper">
+
+    <Transition name="bounce" :duration="1000" >
+        <ToolTip
+          v-if="f && !l"
+          class="login__tooltip border border--error border--sketchy text text--error login__error"
+          position="top"
+        >
+          {{f}}
+        </ToolTip>
+    </Transition>
     <Form @data="onFormSubmit" class="form login__form">
       <div class="list list--vertical">
         <div class="list__item border border--sketchy">
@@ -22,14 +32,12 @@
         </div>
         <div class="form__field list__item logn__cta login__submit">
           <Button
+            :disabled="l"
             size="L"
             variant="outlined"
             class="text text--l border border--sketchy"
           >
-            {{ t("cta_login.label") }}
-            {{l}}
-            {{s}}
-            {{f}}
+            {{ t("cta_login.label") + (l ? '...': '') }}
           </Button>
         </div>
       </div>
@@ -41,6 +49,8 @@
 import { defineComponent } from 'vue';
 import { useI18n } from 'vue-i18n';
 import FormInput from '@/elements/FormInput.vue';
+import Transition from '@/elements/Transition.vue';
+import ToolTip from '@/elements/CSSToolTip.vue';
 import Button from '@/elements/Button.vue';
 import Form from '@/components/Form.vue';
 
@@ -53,6 +63,8 @@ export default defineComponent({
     Button,
     FormInput,
     Form,
+    Transition,
+    ToolTip,
   },
   setup() {
     const { t } = useI18n({

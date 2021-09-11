@@ -1,15 +1,14 @@
 import { InjectionKey } from 'vue';
 import { Store, createStore, useStore as baseUseStore } from 'vuex';
-import type { State } from './state';
+import type { AppState } from './state';
 
-export const key: InjectionKey<Store<State>> = Symbol('store');
+export const key: InjectionKey<Store<AppState>> = Symbol('store');
 
-export const store = createStore<State>({
-  state: {
-    authenticated: false,
+export const store = createStore<AppState>({
+  state: () => ({
+    isAuthenticated: false,
     clientId: '',
-    user: undefined,
-  },
+  }),
 });
 
 export function useStore() {

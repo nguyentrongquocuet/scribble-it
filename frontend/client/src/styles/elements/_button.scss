@@ -1,7 +1,8 @@
 .btn{
-  display: blokc;
   width: fit-content;
   cursor: pointer;
+  border: none;
+  outline: none;
 }
 
 .btn--large {
@@ -10,4 +11,9 @@
 
 .btn--outlined {
   background: transparent;
+  border: 1px solid var(--border-color);
+}
+
+.btn--disabled {
+  --color: var(--color--disabled);
 }

@@ -8,7 +8,10 @@ const gateway = new ApolloGateway({
   ],
 });
 
-const server = new ApolloServer({ gateway });
+const server = new ApolloServer({ 
+  gateway,
+  buildService: ({ url }) => new FileUploadDataSource({ url, useChunkedTransfer: true }),
+});
 
 server.listen().then(({ url }) => {
   console.log("HELLO FROM QUOC 187, Apolo federation is ready, services are ready");

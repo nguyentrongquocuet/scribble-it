@@ -27,11 +27,11 @@ import HomeMenuText from '@/locales/homemenu.json';
 
 const entries = [
   {
-    path: 'login',
+    path: '/hello/login',
     label: 'login',
   },
   {
-    path: 'signup',
+    path: '/hello/signup',
     label: 'signup',
   },
 ];

@@ -42,4 +42,7 @@ $base-size: 16;
   &.text--bold {
     font-weight: bold;
   }
+  &.text--error {
+    --color: var(--green2);
+  }
 }

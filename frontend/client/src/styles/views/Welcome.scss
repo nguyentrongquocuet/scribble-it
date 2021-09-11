@@ -1,9 +1,14 @@
+.welcome__wrapper {
+  height: 80%;
+}
+
 .welcome {
   --welcome-bg: var(--green2);
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -70%);
+  height: 100%;
+}
+
+.welcome__column {
+  flex-direction: column;
 }
 
 .welcome__logo-wrapper {
@@ -19,3 +24,11 @@
   }
 }
 
+.welcome__menu {
+  margin-top: var(--block-space);
+}
+.welcome__column {
+  [class$="leave-active"] {
+    display: none !important;
+  }
+}

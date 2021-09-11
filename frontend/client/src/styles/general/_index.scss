@@ -1,5 +1,6 @@
 body {
-  --body-bg: url('@/assets/bg.jpg');
+  //--body-bg: url('@/assets/bg.jpg');
+  --body-bg: #E8F0FE;
   background: var(--body-bg);
   background-size: cover;
 }
@@ -14,8 +15,11 @@ body {
 }
 
 .border--sketchy {
-  --border-color: #303030;
   border: 1px solid var(--border-color);
+}
+
+.border--error {
+  --border-color: red;
 }
 /**
  * Copy

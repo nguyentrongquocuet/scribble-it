@@ -1,0 +1,49 @@
+.fade-enter-active {
+  transition: 2s opacity ease;
+}
+
+.fade-enter-from {
+  opacity: 0;
+}
+
+.fade-enter-to {
+  opacity: 1;
+}
+
+.fade-leave-active {
+  transition: 1s opacity ease;
+}
+
+.fade-leave-from {
+  opacity: 1;
+}
+
+.fade-leave-to {
+  opacity: 0;
+}
+
+.bounce-enter-active {
+  animation: bounce-in .5s ease-out both;
+}
+
+.bounce-leave-active {
+  animation: bounce-in .5s reverse ease-in both;
+}
+
+@keyframes bounce-in {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.25);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.hide-when-leave{
+  &.fade-leave-active, &.bounce-leave-active {
+    display: none;
+  }
+}

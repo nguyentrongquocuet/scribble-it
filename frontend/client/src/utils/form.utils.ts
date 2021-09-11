@@ -24,3 +24,13 @@ export async function readDataUrl(file: File): Promise<string> {
     reader.readAsDataURL(file);
   });
 }
+
+export function getFileFromEvent(e: Event): File | undefined {
+  const target = e.target as HTMLInputElement;
+  if (!target) return;
+  const { files } = target;
+  if (!files) return;
+  const file = files[0];
+  if (!file) return;
+  return file;
+}

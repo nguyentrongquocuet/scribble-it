@@ -1,10 +1,10 @@
 <template>
-<div class="container">
-Not found
-Go to
-<Link>
-  Login
-</Link>
+<div class="container notfound flex-center">
+  Not found
+  Go to
+  <Link href="/hello">
+    Login
+  </Link>
 </div>
 </template>
 
@@ -13,7 +13,7 @@ import { defineComponent } from 'vue';
 import Link from '@/elements/Link.vue';
 
 export default defineComponent({
-  components:{
+  components: {
     Link,
   },
   setup() {

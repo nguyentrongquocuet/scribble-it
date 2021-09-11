@@ -9,8 +9,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@apollo/federation": "^0.32.0",
     "@apollo/gateway": "^0.34.0",
-    "apollo-server": "^3.0.2"
+    "@profusion/apollo-federation-upload": "^2.2.3",
+    "apollo-server": "^3.0.2",
+    "filenamify": "^5.0.1",
+    "graphql-upload": "^12.0.0",
+    "multer": "^1.4.3",
+    "sanitize-filename": "^1.6.3"
   },
   "devDependencies": {
     "nodemon": "^2.0.12"

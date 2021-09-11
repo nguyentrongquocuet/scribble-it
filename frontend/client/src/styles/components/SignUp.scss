@@ -1,3 +1,31 @@
 .signup__avatar {
   text-align: center;
 }
+
+.signup__form {
+   width: fit-content;
+   text-align: center;
+}
+
+.signup__submit {
+  text-align: center;
+  justify-content: center;
+}
+.signup__button {
+  width: 20%;
+  display: inline-block;
+}
+
+.signup__tooltip {
+  top: -30px;
+  width: 100%;
+}
+
+.signup__avatarpicker {
+  width: fit-content;
+  display: inline-block;
+}
+
+.signup__list {
+  align-items: center;
+}

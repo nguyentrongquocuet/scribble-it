@@ -7,6 +7,7 @@
       :name="name"
       :type="type"
       @change="onChange"
+      :hidden="hidden"
     />
   </div>
 </template>
@@ -27,6 +28,7 @@ export default defineComponent({
     placeholder: String,
     type: String,
     disableAutoComplete: Boolean,
+    hidden: Boolean,
   },
   emits: ['change'],
   setup(_, { emit }) {

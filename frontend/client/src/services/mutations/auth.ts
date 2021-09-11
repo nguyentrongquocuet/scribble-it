@@ -21,7 +21,7 @@ export const LOGIN_MUTATION = gql`
 
 export const SIGNUP_MUTATION = gql`
   mutation MSignUp($username: String!, $password: String!, $repassword: String!) {
-    SignUp(password: $password, repassword: $repassword, username:$username ) {
+    SignUp(password: $password, repassword: $repassword, username:$username) {
       ...on AlreadyRegisted {
         message
       }
@@ -42,3 +42,4 @@ export const SIGNUP_MUTATION = gql`
   }
   ${userFragment()}
 `;
+

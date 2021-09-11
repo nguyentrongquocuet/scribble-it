@@ -1,0 +1,10 @@
+.tooltip {
+  position: absolute;
+  z-index: 1;
+}
+
+.tooltip--top {
+  min-height: 20px;
+  top:0;
+  left: 0;
+}

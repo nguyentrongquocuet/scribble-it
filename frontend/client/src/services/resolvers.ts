@@ -4,12 +4,12 @@ import { apolloClient } from '.';
 import {
   LoginFailResult, LoginQueryResult, LoginResolverResult, LoginSuccessResult, LoginVariable,
 } from './types/auth';
-import { LOGIN_MUTAION } from './mutations/auth';
+import { LOGIN_MUTATION } from './mutations/auth';
 
 export async function RLogin(username: string, password: string):Promise<LoginResolverResult> {
   const {
     mutate, loading,
-  } = useMutation<LoginQueryResult, LoginVariable>(LOGIN_MUTAION);
+  } = useMutation<LoginQueryResult, LoginVariable>(LOGIN_MUTATION);
   let successResult;
   let failResult;
   const response = await mutate({

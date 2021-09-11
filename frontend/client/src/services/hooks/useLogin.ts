@@ -2,7 +2,7 @@ import { ref } from 'vue';
 import { useMutation } from '@vue/apollo-composable';
 import { LOGIN_MUTATION } from '../mutations/auth';
 import {
-  LoginFailResult, LoginQueryResult, LoginSuccessResult, LoginVariable,
+  LoginFailResult, LoginQueryResult, LoginSuccessResult, LoginVariable
 } from '../types/auth';
 
 export default function useLogin() {
@@ -14,6 +14,7 @@ export default function useLogin() {
 
   function login(username: string, password: string) {
     loading.value = true;
+    failResult.value = undefined;
     mutate({
       username,
       password,
