@@ -1,14 +1,20 @@
 <template>
   <div class="signup__container form__wrapper">
-  {{f}}
+    <ToolTip
+      v-if="f && !l"
+      class="signup__tooltip border border--error border--sketchy text text--error signup__error"
+      position="top"
+    >
+      {{ errorToDisplay }}
+    </ToolTip>
     <Form @data="onFormSubmit" class="form signup__form">
       <div class="list list--vertical signup__list">
         <div class="list__item">
           <div class="signup__avatar">
             <Image
               class="avatar avatar--medium border border--sketchy"
-              :class="{'avatar--placeholder': !avatarSrc}"
-              :src="avatarSrc"
+              :class="{'avatar--placeholder': !avatarSrcToShow}"
+              :src="avatarSrcToShow"
             />
           </div>
         </div>
@@ -44,6 +50,7 @@
             size="S"
             variant="outlined"
             @click="toggleSelectAvatar"
+            type="button"
           >
             {{ t('avatar.label')}}
           </Button>
@@ -57,8 +64,8 @@
           />
         </div>
         <div class="form__field list__item signup__cta signup__submit">
-          <Button :disabled="l" size="L" variant="outlined" class="text text--l">
-            {{ t('cta_signup.label') }}
+          <Button :disabled="l" size="L" variant="outlined" class="text text--l" type="submit">
+            {{ t('cta_signup.label') + (l ? '...' : '') }}
           </Button>
         </div>
       </div>
@@ -67,19 +74,23 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref } from 'vue';
+import {
+  computed, defineComponent, reactive, ref,
+} from 'vue';
 import { useI18n } from 'vue-i18n';
 import { MAX_AVATAR_SIZE } from '@/constant';
 import FormInput from '@/elements/FormInput.vue';
 import Input from '@/elements/TextInput.vue';
+import ToolTip from '@/elements/CSSToolTip.vue';
 import Button from '@/elements/Button.vue';
 import Image from '@/elements/Image.vue';
 import Form from '@/components/Form.vue';
 
 import SignUpI18n from '@/locales/signup.json';
+
+import { getFileFromEvent, readDataUrl } from '@/utils/form.utils';
 import { SignUpFormDataMap } from '@/types/utils';
 import useSignUp from '@/services/hooks/useSignUp';
-import { getFileFromEvent, readDataUrl } from '@/utils/form.utils';
 
 export default defineComponent({
   components: {
@@ -88,6 +99,7 @@ export default defineComponent({
     Form,
     Image,
     Input,
+    ToolTip,
   },
   setup() {
     const { t } = useI18n({
@@ -95,25 +107,25 @@ export default defineComponent({
     });
 
     const {
-      loading, failResult, successResult, signup,
+      loading, failResult, successResult, signup, defaultAvatar,
     } = useSignUp();
 
     const avatarPickerRef = ref<InstanceType<typeof Input>>();
 
-    const avatarSrc = ref('');
+    const pickedAvatarSrc = ref('');
 
     function onAvatarChange(e: Event) {
       const file = getFileFromEvent(e);
       if (!file) {
-        avatarSrc.value = '';
+        pickedAvatarSrc.value = '';
         return;
       }
       if (file.size > MAX_AVATAR_SIZE) {
-        avatarSrc.value = '';
+        pickedAvatarSrc.value = '';
         return;
       }
       readDataUrl(file).then((url) => {
-        avatarSrc.value = url;
+        pickedAvatarSrc.value = url;
       });
     }
 
@@ -130,15 +142,34 @@ export default defineComponent({
       signup(username, password, repassword, avatar);
     }
 
+    const errorToDisplay = computed(() => {
+      const failue = failResult.value;
+      if (!failue) return '';
+      switch (failue.__typename) {
+        case 'AlreadyRegisted':
+          return failue.message;
+        case 'InvalidInput':
+          return failue.errors.map((error) => error.error).join('\n');
+        default:
+          return '';
+      }
+    });
+
+    const avatarSrcToShow = computed(() => {
+      if (!pickedAvatarSrc.value) return defaultAvatar.value;
+      return pickedAvatarSrc.value;
+    });
+
     return {
       t,
       l: loading,
       f: failResult,
+      errorToDisplay,
       onFormSubmit,
       avatarPickerRef,
       toggleSelectAvatar,
       onAvatarChange,
-      avatarSrc,
+      avatarSrcToShow,
     };
   },
 });

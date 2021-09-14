@@ -1,5 +1,5 @@
 <template>
-  <transition class="transition">
+  <transition appear class="transition">
     <slot class="transition"/>
   </transition>
 </template>

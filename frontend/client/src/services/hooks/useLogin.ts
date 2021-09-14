@@ -2,7 +2,7 @@ import { ref } from 'vue';
 import { useMutation } from '@vue/apollo-composable';
 import { LOGIN_MUTATION } from '../mutations/auth';
 import {
-  LoginFailResult, LoginQueryResult, LoginSuccessResult, LoginVariable
+  LoginFailResult, LoginQueryResult, LoginSuccessResult, LoginVariable,
 } from '../types/auth';
 
 export default function useLogin() {
@@ -23,17 +23,10 @@ export default function useLogin() {
         const { data } = response;
         if (data) {
           const { Login } = data;
-          if (Login) {
-            const { __typename } = Login;
-            switch (__typename) {
-              case 'LoginFailed':
-                failResult.value = Login.message;
-                break;
-              case 'AuthToken':
-              default:
-                successResult.value = Login;
-                break;
-            }
+          if (Login.status === 'SUCCESS') {
+            successResult.value = Login.node;
+          } else {
+            failResult.value = Login.node.message;
           }
         }
       }

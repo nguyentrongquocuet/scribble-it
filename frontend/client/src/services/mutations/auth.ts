@@ -4,14 +4,18 @@ import { userFragment } from '../fragments';
 export const LOGIN_MUTATION = gql`
   mutation MLogin($username: String!, $password: String!) {
       Login(username: $username, password: $password){
-        ...on LoginFailed {
-            message
-        }
-        ...on AuthToken {
-          token
-          expiredAt
-          user {
-            ...UserFragment
+        status
+        statusCode
+        node {
+          ...on LoginFailed {
+              message
+          }
+          ...on AuthToken {
+            token
+            expiredAt
+            user {
+              ...UserFragment
+            }
           }
         }
       }
@@ -20,22 +24,26 @@ export const LOGIN_MUTATION = gql`
 `;
 
 export const SIGNUP_MUTATION = gql`
-  mutation MSignUp($username: String!, $password: String!, $repassword: String!) {
-    SignUp(password: $password, repassword: $repassword, username:$username) {
-      ...on AlreadyRegisted {
-        message
-      }
-      ...on InvalidInput {
-        errors {
-          error
-          field
+  mutation MSignUp($username: String!, $password: String!, $repassword: String!, $avatar: String) {
+    SignUp(password: $password, repassword: $repassword, username:$username, avatar: $avatar) {
+      status
+      statusCode
+      node {
+        ...on AlreadyRegisted {
+          message
         }
-      }
-      ...on AuthToken {
-        expiredAt
-        token
-        user {
-          ...UserFragment
+        ...on InvalidInput {
+          errors {
+            error
+            field
+          }
+        }
+        ...on AuthToken {
+          expiredAt
+          token
+          user {
+            ...UserFragment
+          }
         }
       }
     }

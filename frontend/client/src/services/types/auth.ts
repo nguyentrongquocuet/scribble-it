@@ -1,9 +1,5 @@
 import { UserAuthToken } from '@/types';
-import { ResolverResult } from './base';
-
-export interface QueryResult <T extends string> {
-  __typename: T;
-}
+import { QueryResult, ResolverResult, RootQueryResult } from './base';
 
 export type QueryResultOf<T extends string, U> = QueryResult<T> & U;
 
@@ -18,7 +14,7 @@ export interface LoginFailed {
 }
 
 export type LoginQueryResult = {
-  Login: (QueryResultOf<'AuthToken', UserAuthToken>) | (QueryResultOf<'LoginFailed', LoginFailed>);
+  Login: RootQueryResult<'LoginQueryResult', (QueryResultOf<'AuthToken', UserAuthToken>), (QueryResultOf<'LoginFailed', LoginFailed>)>;
 }
 
 export type LoginSuccessResult = UserAuthToken;
@@ -33,10 +29,7 @@ export interface SignUpVariable {
   username: string;
   password: string;
   repassword: string;
-  avatar?: File;
-  context: {
-    hasUpload: boolean;
-  }
+  avatar?: string;
 }
 
 interface AlreadyRegisted {
@@ -49,18 +42,19 @@ interface InputError {
 }
 
 interface InvalidInput {
-  errors: InputError;
+  errors: InputError[];
 }
-
-type SignUpSuccessQueryResult = QueryResultOf<'AuthToken', UserAuthToken>;
 
 export type SignUpSuccessResult = UserAuthToken;
 
+type SignUpSuccessQueryResult = QueryResultOf<'AuthToken', UserAuthToken>;
 
 export type SignUpFailResult = QueryResultOf<'AlreadyRegisted', AlreadyRegisted> | QueryResultOf<'InvalidInput', InvalidInput>;
 
+export type SignUpFailQueryResult = SignUpFailResult;
+
 export type SignUpQueryResult = {
-  SignUp: SignUpFailResult | SignUpSuccessQueryResult;
+  SignUp: RootQueryResult<'SignUpQueryResult', SignUpSuccessQueryResult, SignUpFailQueryResult>;
 }
 
 export type SignUpResolverResult = ResolverResult<SignUpSuccessResult, SignUpFailResult>;

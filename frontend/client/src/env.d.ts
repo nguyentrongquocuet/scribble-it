@@ -10,5 +10,6 @@ declare module '*.vue' {
 interface ImportMetaEnv {
   VITE_APP_TITLE: string
   VITE_SERVER_URL: string
+  VITE_UPLOAD_SERVER_URL: string
   // more env variables...
 }
