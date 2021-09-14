@@ -5,6 +5,7 @@ from mongoengine import connect, connection
 
 class db():
     client: connection = None
+
     def __init__(self):
         host = os.environ['MONGO_DB_HOST']
         port = int(os.environ['MONGO_DB_PORT'])

@@ -1,4 +1,8 @@
 import dotenv
 
 
-dotenv.load_dotenv()
+def load_env():
+    dotenv.load_dotenv()
+
+
+load_env()

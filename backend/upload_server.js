@@ -1,8 +1,8 @@
-const http = require('http');
-const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
 const { Duplex } = require('stream');
+const http = require('http');
+const multer = require('multer');
 const safeFileName = require('sanitize-filename');
 
 const uploader = multer();
@@ -11,60 +11,98 @@ const VERSION = 'v1';
 
 const PATH_TO_STORAGE = path.resolve(__dirname, 'uploads');
 
-function createFilePath(fileName) {
+/**
+ *  Max accept file size in bytes
+ */
+const SERVER_MAX_FILE_SIZE = 1024 * 1024;
+
+function createFilePath(folder, fileName, public = false) {
   if (!fileName) throw new Error('sss');
-  return path.resolve(PATH_TO_STORAGE, fileName)
+  const authorizationPath = public ? path.resolve(PATH_TO_STORAGE, 'public'): path.resolve(PATH_TO_STORAGE, 'private');
+  return path.resolve(authorizationPath, folder, fileName)
 }
 
 const ROUTES = [
   {
-    path: 'avatar',
+    path: 'upload',
     methods: ['POST'],
     upload: true,
-  },
-  {
-    path: 'test',
-    methods: ['GET'],
-    upload: false,
+    maxSize: 0,
+    operations: ['signup'],
   }
-]
+];
+
+const headers = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'OPTIONS, POST, GET',
+  'Access-Control-Max-Age': 2592000, // 30 days
+  /** add other headers as per requirement */
+};
+
+const folderByOperationMap = {
+  signup: 'avatars',
+}
+
+function getFolderFromOperation(o) {
+  return folderByOperationMap[o];
+}
+
+function getInfoFromRequestQuery(query = '') {
+  const paramMap = new URLSearchParams(query);
+  const fieldName = paramMap.get('f');
+  const operation = paramMap.get('o');
+  const folder = getFolderFromOperation(operation);
+  
+  return {
+    fieldName,
+    operation,
+    folder,
+  }
+}
 
 const server = http.createServer((req, res) => {
   let method = req.method || '';
   method = method.toUpperCase();
   if (!method) return methodNotAllow(req, res);
   const url = req.url || '';
-  const urlFragments = url.split('/');
+  const [fullPath, queryPart] = url.split('?');
+  const urlFragments = fullPath.split('/');
   const version = urlFragments[1];
   if (version.toLowerCase() !== VERSION) return versionNotSupport(req, res);
-  const path = urlFragments[2];
-  const queryPart = url.split('?')[1];
-  const params = new URLSearchParams(queryPart);
-  const nameOfFileField = params.get('f');
+  const path = urlFragments.slice(2).filter(s => s).join('/');
+  console.log(path);
+  const { folder, fieldName, operation } = getInfoFromRequestQuery(queryPart);
+
+  let maxAllowSize = SERVER_MAX_FILE_SIZE;
+  let private = true;
+
   let found = false;
   for (let i=0; i < ROUTES.length; i++) {
     const route = ROUTES[i];
-    if (!route.path === path) break;
+    if (route.path !== path) continue;
     if (route.methods.indexOf(method) === -1) return methodNotAllow(req, res);
-    if (route.upload && !nameOfFileField) return badRequest(req, res);
+    console.log("here");
+    if (route.upload && !fieldName) return badRequest(req, res);
     if (method !== 'POST' && route.upload) return badRequest(req, res);
+    if (route.operations && route.operations.indexOf(operation) === -1) return unsupportedOperation(req, res);
     found = true;
+    if (route.maxSize) maxAllowSize = route.maxSize;
+    private = !!route.private;
     break;
   }
   if (!found) {
-    endpointNotFound(req, res);
+    return endpointNotFound(req, res);
   }
-  console.log(nameOfFileField);
   try {
-    uploader.single(nameOfFileField)(req, res, (...args) => {
-      console.log(args);
+    uploader.single(fieldName)(req, res, (_) => {
       const file = req.file;
       if (!file) return somethingWentWrong(req, res);
       const { originalname, buffer, size } = file;
+      if (size > maxAllowSize) return fileIsTooLarge(req, res);
       const safeName = safeFileName(originalname);
       const [nameWithoutExt, ext = ''] = safeName.split(/\.([^.]*)$/);
-      const fileName = [nameWithoutExt + '-' + Date.now(), ext].filter(s => !!s).join('.');
-      const filePath = createFilePath(fileName);
+      const fileName = [nameWithoutExt + '-' + size + '-' + Date.now(), ext].filter(s => !!s).join('.');
+      const filePath = createFilePath(folder, fileName, !private);
       console.log('extension', nameWithoutExt, ext, safeName, filePath);
       const read = bufferToStream(buffer);
       const write = fs.createWriteStream(filePath, {
@@ -88,12 +126,11 @@ const server = http.createServer((req, res) => {
       })
       write.on('finish', () => {
         console.log("WRITEN");
-        success(req, res);
+        success(req, res,folder + '/'+ fileName, private);
         write.close();
       })
     });
   } catch(e) {
-    console.log(e);
     somethingWentWrong(req, res);
   }
 });
@@ -105,19 +142,41 @@ function bufferToStream(myBuuffer) {
     return tmp;
 }
 
-function success(req, res, message = '') {
+function success(req, res, filePath = '', requiresAuth = true) {
   res.setHeader('content-type', 'application/json');
-  res.statusCode = 201;
+  res.writeHead(201, headers);
   res.statusMessage = 'success';
+  const prepend = requiresAuth ? '<@UF/PRIVATE_PATH@>' : '<@UF/PUBLIC_PATH@>';
   res.write(JSON.stringify({
-    'message': 'success, ' + message
+    success: true,
+    'url':  prepend + filePath,
   }))
   res.end();
 }
 
+function unsupportedOperation(req, res) {
+  res.setHeader('content-type', 'application/json');
+  res.writeHead(400, headers);
+  res.statusMessage = 'unsupportOperation';
+  res.write(JSON.stringify({
+    'message': 'unsupported operation'
+  }))
+  res.end();
+}
+
+function fileIsTooLarge(req, res) {
+  res.setHeader('content-type', 'application/json');
+  res.writeHead(403, headers);
+  res.statusMessage = 'Forbidden';
+  res.write(JSON.stringify({
+    'message': 'File is too large'
+  }))
+  res.end();
+}
+ 
 function versionNotSupport(req, res) {
   res.setHeader('content-type', 'application/json');
-  res.statusCode = 400;
+  res.writeHead(400, headers);
   res.statusMessage = 'wrong version';
   res.write(JSON.stringify({
     'message': 'Wrong version'
@@ -127,7 +186,7 @@ function versionNotSupport(req, res) {
 
 function somethingWentWrong(req, res) {
   res.setHeader('content-type', 'application/json');
-  res.statusCode = 500;
+  res.writeHead(500, headers);
   res.statusMessage = 'stwr';
   res.write(JSON.stringify({
     'message': 'Something went wrong'
@@ -137,7 +196,7 @@ function somethingWentWrong(req, res) {
 
 function badRequest(req, res) {
   res.setHeader('content-type', 'application/json');
-  res.statusCode = 400;
+  res.writeHead(400, headers);
   res.statusMessage = 'bad request';
   res.write(JSON.stringify({
     'message': 'Bad request'
@@ -147,7 +206,7 @@ function badRequest(req, res) {
 
 function methodNotAllow(req, res) {
   res.setHeader('content-type', 'application/json');
-  res.statusCode = 405;
+  res.writeHead(405, headers);
   res.statusMessage = 'method not allowed';
   res.write(JSON.stringify({
     'message': 'Method not allowed'
@@ -157,7 +216,7 @@ function methodNotAllow(req, res) {
 
 function endpointNotFound(req, res) {
   res.setHeader('content-type', 'application/json');
-  res.statusCode = 404;
+  res.writeHead(404, headers);
   res.statusMessage = 'not found';
   res.write(JSON.stringify({
     'message': 'Invalid endpoint'

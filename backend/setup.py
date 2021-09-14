@@ -1,28 +1,36 @@
 import asyncio
+import env.load
 
-from flask.helpers import send_from_directory
-from env import load
-from api.graphql.services import socket
-from ariadne.constants import PLAYGROUND_HTML
-from ariadne import graphql_sync
 from flask import Flask, request, jsonify
-from graphql.error.graphql_error import GraphQLError
+from flask.helpers import send_from_directory
 
-from api.graphql.services.game import game_schema
+from ariadne import graphql_sync
+from ariadne.constants import PLAYGROUND_HTML
+
 from api.graphql.services.user import user_schema
+from api.graphql.services.game import game_schema
+from graphql.error.graphql_error import GraphQLError
+from api.graphql.extensions.Common import CommonExtension
+from api.graphql.services import socket
 
-from api.db.db import db
 
+# def setup():
 app = Flask(__name__)
 
 app.config['FLASK_ENV'] = "development"
 
 
 @app.route("/resource/static/<path:path>", methods=["GET"])
-def resolve_resource(path):
+def resolve_static_resource(path):
     print(f"path {path}")
     print(path)
     return send_from_directory(path=path, directory='public')
+
+
+@app.route("/resource/uploads/<path:path>", methods=["GET"])
+def resolve_upload_resource(path):
+    print(f"upload resource{path}")
+    return send_from_directory(path=path, directory='uploads')
 
 
 @app.route("/graphql", methods=["GET"])
@@ -53,9 +61,10 @@ def graph_user_service():
     success, result = graphql_sync(
         game_schema,
         data,
-        context_value=request,
+        context_value={'request': request},
         debug=app.debug,
-        error_formatter=error_formatter
+        error_formatter=error_formatter,
+        extensions=[CommonExtension]
     )
     status_code = 200 if success else 400
     return jsonify(result), status_code
@@ -71,9 +80,10 @@ def graph_game_service():
     success, result = graphql_sync(
         user_schema,
         data,
-        context_value=request,
+        context_value={'request': request},
         debug=app.debug,
-        error_formatter=error_formatter
+        error_formatter=error_formatter,
+        extensions=[CommonExtension]
     )
 
     status_code = 200 if success else 400
@@ -88,9 +98,12 @@ async def run_socket():
     socket.sio.init_app(app=app)
     socket.sio.run(app, host='localhost', port=4002, debug=True)
 
+
 if __name__ == "__main__":
+    from api.db.db import db
     print("HELLO FROM QUOC187")
     DB = db()
+    # app, run_flask, run_socket = setup()
     print("MONGODB IS READY, STARTING SOCKETIO")
     # asyncio.run(run_flask())
     asyncio.run(run_socket())

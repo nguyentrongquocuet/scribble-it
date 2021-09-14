@@ -6,6 +6,16 @@ interface FullDetailUser {
   avatar: String
 }
 
+enum Status {
+  SUCCESS
+  ERROR
+}
+
+interface QueryResult {
+  status: Status!
+  statusCode: Int!
+}
+
 type User @key(fields: "id") {
   id: ID!
   username: String!
@@ -39,16 +49,29 @@ union SignUpResult = AuthToken | AlreadyRegisted | InvalidInput
 
 union LoginResult = AuthToken | LoginFailed
 
+type SignUpQueryResult implements QueryResult {
+  statusCode: Int!
+  status: Status!
+  node: SignUpResult!
+}
+
+type LoginQueryResult implements QueryResult {
+  statusCode: Int!
+  status: Status!
+  node: LoginResult!
+}
+
 type Mutation {
   SignUp(
     username: String!
     password: String!
     repassword: String!
-  ): SignUpResult
-  Login(username: String!, password: String!): LoginResult
+    avatar: String
+  ): SignUpQueryResult
+  Login(username: String!, password: String!): LoginQueryResult
 }
 
 type Query {
-  RefreshToken: String
-  GetAvatarChoices: [String]!
+  NewToken: String
+  DefaultAvatar: String!
 }
